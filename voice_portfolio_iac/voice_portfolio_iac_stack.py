@@ -77,7 +77,7 @@ class VoicePortfolioIacStack(Stack):
             self,
             'VoiceClientS3Domain',
             zone=zone,
-            record_name="app",
+            record_name="voice",
             domain_name=distribution.distribution_domain_name
         )
 

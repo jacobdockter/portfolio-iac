@@ -9,7 +9,7 @@ from voice_portfolio_iac.voice_portfolio_iac_stack import VoicePortfolioIacStack
 app = cdk.App()
 VoicePortfolioIacStack(
     app,
-    "PortfolioIacStack",
+    "VoicePortfolioIacStack",
     env=cdk.Environment(
         account=os.getenv('CDK_DEFAULT_ACCOUNT'),
         region=os.getenv('CDK_DEFAULT_REGION')
