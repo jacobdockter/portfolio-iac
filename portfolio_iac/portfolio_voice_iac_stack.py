@@ -2,7 +2,6 @@ from aws_cdk import (
     Stack,
     RemovalPolicy,
     Duration,
-    CfnOutput,
     aws_iam as iam,
     aws_cloudfront as cloudfront,
     aws_cloudfront_origins as origins,
@@ -10,37 +9,24 @@ from aws_cdk import (
     aws_codepipeline as codepipeline,
     aws_codepipeline_actions as codepipeline_actions,
     aws_s3 as s3,
-    aws_certificatemanager as acm,
     aws_route53 as route53
 )
 from constructs import Construct
 
-class VoicePortfolioIacStack(Stack):
+class PortfolioVoiceIacStack(Stack):
 
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
+    def __init__(
+        self,
+        scope: Construct,
+        construct_id: str,
+        codestar_arn,
+        github_account,
+        base_domain,
+        portfolio_zone,
+        portfolio_certificate,
+        **kwargs
+    ) -> None:
         super().__init__(scope, construct_id, **kwargs)
-
-        codestar_arn = "arn:aws:codestar-connections:us-east-1:519292530037:connection/5b4f0d41-8af8-49b2-918b-8955b97aee9d"
-        github_account = "jacobdockter"
-        domain_zone_id = "Z04599073ANR3P6TNUUQD"
-        base_domain = "jacobdockter.com"
-
-        # retrieve domain zonr from route53
-        zone = route53.HostedZone.from_hosted_zone_attributes(
-            self,
-            "VoiceDomainZone",
-            hosted_zone_id=domain_zone_id,
-            zone_name=base_domain
-        )
-
-        # create certificate validated by zone
-        portfolio_certificate = acm.Certificate(
-            self,
-            'VoiceClientCertificate',
-            certificate_name=f"voice.{base_domain}",
-            domain_name=f"voice.{base_domain}",
-            validation=acm.CertificateValidation.from_dns(zone)
-        )
 
         # client bucket to hold application
         client_bucket = s3.Bucket(
@@ -68,7 +54,6 @@ class VoicePortfolioIacStack(Stack):
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
             ),
             domain_names=[f"voice.{base_domain}"],
-            
             certificate=portfolio_certificate
         )
 
@@ -76,7 +61,7 @@ class VoicePortfolioIacStack(Stack):
         route53.CnameRecord(
             self,
             'VoiceClientS3Domain',
-            zone=zone,
+            zone=portfolio_zone,
             record_name="voice",
             domain_name=distribution.distribution_domain_name
         )
@@ -159,7 +144,7 @@ class VoicePortfolioIacStack(Stack):
         ))
 
         # client pipeline
-        pipeline = codepipeline.Pipeline(
+        codepipeline.Pipeline(
             self,
             "VoiceClientGitHubPipeline",
             pipeline_name="VoiceClientGitHubPipeline",
@@ -184,33 +169,4 @@ class VoicePortfolioIacStack(Stack):
                     ]
                 )
             ]
-        )
-
-        # Outputs
-        CfnOutput(
-            self,
-            'VoiceCertificate',
-            value=portfolio_certificate.certificate_arn,
-            description="Voice Certificate"
-        )
-
-        CfnOutput(
-            self,
-            'VoiceClientURL',
-            value=client_bucket.bucket_website_url,
-            description="Client S3 Bucket URL"
-        )
-
-        CfnOutput(
-            self,
-            'VoiceClientDist',
-            value=distribution.distribution_domain_name,
-            description="Client CloudFront Distribution"
-        )
-
-        CfnOutput(
-            self,
-            "VoicePipelineOut",
-            description="Code Pipeline",
-            value=pipeline.pipeline_name
         )
