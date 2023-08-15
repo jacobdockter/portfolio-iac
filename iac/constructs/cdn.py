@@ -32,7 +32,7 @@ class CDN(Construct):
         # client bucket to hold application
         if storage:
             client_bucket = s3.Bucket(
-                self, 
+                self,
                 resource_name + 'Bucket',
                 bucket_name=f"{sub_domain}{BASE_DOMAIN}",
                 removal_policy=RemovalPolicy.DESTROY,
