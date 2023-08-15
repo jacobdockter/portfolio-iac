@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import os
 import aws_cdk as cdk
-from iac.portfolio_stack import PortfolioStack
+from iac.portfolio_stack import PortfolioIacStack
 
 app = cdk.App()
 
-PortfolioStack(
+PortfolioIacStack(
     app,
     "PortfolioStack",
     env=cdk.Environment(

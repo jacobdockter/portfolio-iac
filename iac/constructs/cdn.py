@@ -3,7 +3,6 @@ CDN Construct Class
 """
 from aws_cdk import (
     RemovalPolicy,
-    aws_certificatemanager as acm,
     aws_route53 as route53,
     aws_s3 as s3,
     aws_cloudfront as cloudfront,
@@ -31,7 +30,7 @@ class CDN(Construct):
 
         # client bucket to hold application
         if storage:
-            client_bucket = s3.Bucket(
+            self.client_bucket = s3.Bucket(
                 self,
                 resource_name + 'Bucket',
                 bucket_name=f"{sub_domain}{BASE_DOMAIN}",
@@ -39,7 +38,7 @@ class CDN(Construct):
                 block_public_access = s3.BlockPublicAccess.BLOCK_ALL
             )
         else:
-            client_bucket = s3.Bucket(
+            self.client_bucket = s3.Bucket(
                 self,
                 resource_name + 'Bucket',
                 bucket_name=f"{sub_domain}{BASE_DOMAIN}",
@@ -56,11 +55,11 @@ class CDN(Construct):
             )
 
         # create cloudfront distribution for delivery
-        distribution = cloudfront.Distribution(
+        self.distribution = cloudfront.Distribution(
             self,
             resource_name + 'Distribution',
             default_behavior=cloudfront.BehaviorOptions(
-                origin=origins.S3Origin(client_bucket),
+                origin=origins.S3Origin(self.client_bucket),
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
             ),
             domain_names=[f"{sub_domain}{BASE_DOMAIN}"],
@@ -73,5 +72,5 @@ class CDN(Construct):
             resource_name + 'S3Domain',
             zone=zone,
             record_name=sub_domain,
-            domain_name=distribution.distribution_domain_name
+            domain_name=self.distribution.distribution_domain_name
         )

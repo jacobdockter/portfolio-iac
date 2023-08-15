@@ -1,3 +1,6 @@
+"""portfolio_stack.py
+Defines the PortfolioIacStack class
+"""
 from aws_cdk import (
     Stack,
 )
@@ -5,6 +8,7 @@ from constructs import Construct
 from iac.constructs.dns import DNS
 from iac.constructs.cdn import CDN
 from iac.constructs.client_pipeline import ClientPipeline
+from iac.constructs.iac_pipeline import IacPipeline
 
 class PortfolioIacStack(Stack):
     """
@@ -18,6 +22,14 @@ class PortfolioIacStack(Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
+
+        # create iac pipeline
+        IacPipeline(
+            self,
+            "IacPipeline",
+            "Portfolio",
+            "portfolio-iac"
+        )
 
         # create dns construct
         dns = DNS(
@@ -97,10 +109,3 @@ class PortfolioIacStack(Stack):
             directory_client.distribution,
             "directory-portfolio-client"
         )
-
-        # TODO: Email Setup
-        # TODO Lambda, Bucket, SES: 2 verified identities and a rule set, iam role + policy
-
-        # TODO: IaC pipeline
-
-        # TODO: secrets manager

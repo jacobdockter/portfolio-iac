@@ -1,6 +1,7 @@
 """client_pipeline.py
 Client Pipeline Construct Class
 """
+import os
 from aws_cdk import (
     Duration,
     aws_iam as iam,
@@ -8,8 +9,8 @@ from aws_cdk import (
     aws_codepipeline as codepipeline,
     aws_codepipeline_actions as codepipeline_actions
 )
-from iac.constants import GITHUB_ACCOUNT, CODESTAR_ARN
 from constructs import Construct
+from iac.constants import GITHUB_ACCOUNT, CODESTAR_ARN
 
 class ClientPipeline(Construct):
     """
@@ -96,7 +97,7 @@ class ClientPipeline(Construct):
         )
 
         # add Cloudfront invalidation permissions to the project
-        distribution_arn = f"arn:aws:cloudfront::{self.account}:distribution/{distribution.distribution_id}"
+        distribution_arn = f"arn:aws:cloudfront::{os.getenv('CDK_DEFAULT_ACCOUNT')}:distribution/{distribution.distribution_id}"
         invalidate_build_project.add_to_role_policy(iam.PolicyStatement(
             resources=[distribution_arn],
             actions=[
