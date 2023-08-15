@@ -4,6 +4,7 @@ CDN Construct Class
 from aws_cdk import (
     RemovalPolicy,
     aws_route53 as route53,
+    aws_route53_targets as route53_targets,
     aws_s3 as s3,
     aws_cloudfront as cloudfront,
     aws_cloudfront_origins as origins
@@ -45,6 +46,12 @@ class CDN(Construct):
                 website_index_document='index.html',
                 website_error_document='index.html',
                 public_read_access=True,
+                block_public_access=s3.BlockPublicAccess(
+                    block_public_acls=False,
+                    block_public_policy=False,
+                    ignore_public_acls=False,
+                    restrict_public_buckets=False
+                ),
                 removal_policy=RemovalPolicy.DESTROY,
                 cors=[
                     s3.CorsRule(
@@ -63,14 +70,17 @@ class CDN(Construct):
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
             ),
             domain_names=[f"{sub_domain}{BASE_DOMAIN}"],
-            certificate=certificate
+            certificate=certificate,
         )
 
         # route cloudfront traffic to custom client domain
-        route53.CnameRecord(
+        name = BASE_DOMAIN if sub_domain == '' else sub_domain.replace('.', '')
+        route53.ARecord(
             self,
-            resource_name + 'S3Domain',
+            resource_name + 'Domain',
             zone=zone,
-            record_name=sub_domain,
-            domain_name=self.distribution.distribution_domain_name
+            record_name=name,
+            target=route53.RecordTarget.from_alias(
+                route53_targets.CloudFrontTarget(self.distribution)
+            )
         )

@@ -35,5 +35,6 @@ class DNS(Construct):
             project_name + "Certificate",
             certificate_name=f"{BASE_DOMAIN}",
             domain_name=f"*.{BASE_DOMAIN}",
+            subject_alternative_names=[BASE_DOMAIN],
             validation=acm.CertificateValidation.from_dns(self.zone)
         )
