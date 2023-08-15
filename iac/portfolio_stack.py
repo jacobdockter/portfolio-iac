@@ -15,10 +15,6 @@ class PortfolioIacStack(Stack):
         self,
         scope: Construct,
         construct_id: str,
-        codestar_arn,
-        github_account,
-        base_domain,
-        domain_zone_id,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -27,9 +23,7 @@ class PortfolioIacStack(Stack):
         dns = DNS(
             self,
             "DNS",
-            "Portfolio",
-            base_domain=base_domain,
-            domain_zone_id=domain_zone_id
+            "Portfolio"
         )
 
         # create cdn bucket
@@ -38,7 +32,6 @@ class PortfolioIacStack(Stack):
             "CDN",
             "CDN",
             dns.zone,
-            base_domain,
             dns.certificate,
             "cdn.",
             True
@@ -50,7 +43,6 @@ class PortfolioIacStack(Stack):
             "VoiceClient",
             "VoiceClient",
             dns.zone,
-            base_domain,
             dns.certificate,
             "voice."
         )
@@ -60,8 +52,6 @@ class PortfolioIacStack(Stack):
             self,
             "VoiceClientPipeline",
             "Voice",
-            github_account,
-            codestar_arn,
             voice_client.client_bucket,
             voice_client.distribution,
             "voice-portfolio-client"
@@ -74,7 +64,6 @@ class PortfolioIacStack(Stack):
             "DevClient",
             "DevClient",
             dns.zone,
-            base_domain,
             dns.certificate,
             "dev."
         )
@@ -84,8 +73,6 @@ class PortfolioIacStack(Stack):
             self,
             "DevClientPipeline",
             "Dev",
-            github_account,
-            codestar_arn,
             dev_client.client_bucket,
             dev_client.distribution,
             "dev-portfolio-client"
@@ -97,7 +84,6 @@ class PortfolioIacStack(Stack):
             "DirectoryClient",
             "DirectoryClient",
             dns.zone,
-            base_domain,
             dns.certificate,
             ""
         )
@@ -107,8 +93,6 @@ class PortfolioIacStack(Stack):
             self,
             "DirectoryClientPipeline",
             "Directory",
-            github_account,
-            codestar_arn,
             directory_client.client_bucket,
             directory_client.distribution,
             "directory-portfolio-client"
@@ -116,3 +100,7 @@ class PortfolioIacStack(Stack):
 
         # TODO: Email Setup
         # TODO Lambda, Bucket, SES: 2 verified identities and a rule set, iam role + policy
+
+        # TODO: IaC pipeline
+
+        # TODO: secrets manager

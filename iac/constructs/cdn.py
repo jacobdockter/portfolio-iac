@@ -10,6 +10,7 @@ from aws_cdk import (
     aws_cloudfront_origins as origins
 )
 from constructs import Construct
+from iac.constants import BASE_DOMAIN
 
 class CDN(Construct):
     """
@@ -21,7 +22,6 @@ class CDN(Construct):
         construct_id: str,
         resource_name: str,
         zone,
-        base_domain,
         certificate,
         sub_domain: str,
         storage: bool = False,
@@ -34,7 +34,7 @@ class CDN(Construct):
             client_bucket = s3.Bucket(
                 self, 
                 resource_name + 'Bucket',
-                bucket_name=f"{sub_domain}{base_domain}",
+                bucket_name=f"{sub_domain}{BASE_DOMAIN}",
                 removal_policy=RemovalPolicy.DESTROY,
                 block_public_access = s3.BlockPublicAccess.BLOCK_ALL
             )
@@ -42,7 +42,7 @@ class CDN(Construct):
             client_bucket = s3.Bucket(
                 self,
                 resource_name + 'Bucket',
-                bucket_name=f"{sub_domain}{base_domain}",
+                bucket_name=f"{sub_domain}{BASE_DOMAIN}",
                 website_index_document='index.html',
                 website_error_document='index.html',
                 public_read_access=True,
@@ -63,7 +63,7 @@ class CDN(Construct):
                 origin=origins.S3Origin(client_bucket),
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
             ),
-            domain_names=[f"{sub_domain}{base_domain}"],
+            domain_names=[f"{sub_domain}{BASE_DOMAIN}"],
             certificate=certificate
         )
 
