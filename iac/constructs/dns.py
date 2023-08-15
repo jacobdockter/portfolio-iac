@@ -1,35 +1,40 @@
+"""dns.py
+DNS Construct Class
+"""
 from aws_cdk import (
-    Stack,
     aws_certificatemanager as acm,
     aws_route53 as route53
 )
 from constructs import Construct
 
-class PortfolioDirectoryIacStack(Stack):
-
+class DNS(Construct):
+    """
+    Defines that resources that make up a DNS
+    """
     def __init__(
         self,
         scope: Construct,
         construct_id: str,
+        project_name: str,
         domain_zone_id,
         base_domain,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # retrieve domain zonr from route53
-        self.portfolio_zone = route53.HostedZone.from_hosted_zone_attributes(
+        # retrieve domain zone from route53
+        self.zone = route53.HostedZone.from_hosted_zone_attributes(
             self,
-            "PortfolioDomainZone",
+            project_name + "DomainZone",
             hosted_zone_id=domain_zone_id,
             zone_name=base_domain
         )
 
         # create certificate validated by zone
-        self.portfolio_certificate = acm.Certificate(
+        self.certificate = acm.Certificate(
             self,
-            'PortfolioCertificate',
+            project_name + "Certificate",
             certificate_name=f"{base_domain}",
             domain_name=f"*.{base_domain}",
-            validation=acm.CertificateValidation.from_dns(self.portfolio_zone)
+            validation=acm.CertificateValidation.from_dns(self.zone)
         )

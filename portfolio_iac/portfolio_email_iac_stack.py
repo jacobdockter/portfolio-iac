@@ -1,1 +1,0 @@
-# TODO Lambda, Bucket, SES: 2 verified identities and a rule set, iam role + policy

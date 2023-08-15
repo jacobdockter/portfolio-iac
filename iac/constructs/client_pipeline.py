@@ -1,77 +1,39 @@
+"""client_pipeline.py
+Client Pipeline Construct Class
+"""
 from aws_cdk import (
-    Stack,
-    RemovalPolicy,
     Duration,
     aws_iam as iam,
-    aws_cloudfront as cloudfront,
-    aws_cloudfront_origins as origins,
     aws_codebuild as codebuild,
     aws_codepipeline as codepipeline,
-    aws_codepipeline_actions as codepipeline_actions,
-    aws_s3 as s3,
-    aws_route53 as route53
+    aws_codepipeline_actions as codepipeline_actions
 )
 from constructs import Construct
 
-class PortfolioVoiceIacStack(Stack):
-
+class ClientPipeline(Construct):
+    """
+    Defines the resources that make up a client pipeline
+    """
     def __init__(
         self,
         scope: Construct,
         construct_id: str,
-        codestar_arn,
+        resource_name: str,
         github_account,
-        base_domain,
-        portfolio_zone,
-        portfolio_certificate,
+        codestar_arn,
+        client_bucket,
+        distribution,
+        repository,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # client bucket to hold application
-        client_bucket = s3.Bucket(
-            self,
-            'VoiceClientBucket',
-            bucket_name=f"voice.{base_domain}",
-            website_index_document='index.html',
-            website_error_document='index.html',
-            public_read_access=True,
-            removal_policy=RemovalPolicy.DESTROY,
-            cors=[
-                s3.CorsRule(
-                    allowed_origins=["*"],
-                    allowed_methods=[s3.HttpMethods.GET]
-                )
-            ]
-        )
-
-        # create cloudfront distribution for delivery
-        distribution = cloudfront.Distribution(
-            self,
-            'VoiceClientDistribution',
-            default_behavior=cloudfront.BehaviorOptions(
-                origin=origins.S3Origin(client_bucket),
-                viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
-            ),
-            domain_names=[f"voice.{base_domain}"],
-            certificate=portfolio_certificate
-        )
-
-        # route cloudfront traffic to custom client domain
-        route53.CnameRecord(
-            self,
-            'VoiceClientS3Domain',
-            zone=portfolio_zone,
-            record_name="voice",
-            domain_name=distribution.distribution_domain_name
-        )
-
         # source output/action for pipeline - pulls from github repo
         source_output = codepipeline.Artifact()
         source_action = codepipeline_actions.CodeStarConnectionsSourceAction(
-            action_name="VoiceClientCodeStarSource",
+            action_name=f"{resource_name}CodeStarSource",
             owner=github_account,
-            repo="voice-portfolio-client",
+            repo=repository,
             output=source_output,
             connection_arn=codestar_arn
         )
@@ -82,11 +44,11 @@ class PortfolioVoiceIacStack(Stack):
             action_name="Build",
             project=codebuild.PipelineProject(
                 self,
-                "voice-client-codebuild-project",
+                f"{resource_name}ClientCodeBuildProject",
                 build_spec=codebuild.BuildSpec.from_source_filename(
                     filename='buildspec.yml'
                 ),
-                description='Pipeline for CodeBuild',
+                description=f'Pipeline for {resource_name} Client CodeBuild',
                 timeout=Duration.minutes(60),
                 environment=codebuild.BuildEnvironment(
                     build_image=codebuild.LinuxBuildImage.STANDARD_6_0,
@@ -146,8 +108,8 @@ class PortfolioVoiceIacStack(Stack):
         # client pipeline
         codepipeline.Pipeline(
             self,
-            "VoiceClientGitHubPipeline",
-            pipeline_name="VoiceClientGitHubPipeline",
+            f"{resource_name}ClientGitHubPipeline",
+            pipeline_name=f"{resource_name}ClientGitHubPipeline",
             stages=[
                 codepipeline.StageProps(
                     stage_name="Source",
