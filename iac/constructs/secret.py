@@ -1,11 +1,11 @@
-"""secrets.py
-Secrets Construct Class
+"""secret.py
+Secret Construct Class
 """
 from constructs import Construct
 
-class Secrets(Construct):
+class Secret(Construct):
     """
-    Defines that resources that make up Secrets
+    Defines that resources that make up a Secret
     """
     def __init__(
         self,
@@ -16,6 +16,6 @@ class Secrets(Construct):
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        print(f'Creating Secrets for {project_name}')
+        print(f'Creating Secret for {project_name}')
 
         # TODO: secrets
