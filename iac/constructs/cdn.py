@@ -34,7 +34,7 @@ class CDN(Construct):
             self.client_bucket = s3.Bucket(
                 self,
                 resource_name + 'Bucket',
-                bucket_name=f"{sub_domain}{BASE_DOMAIN}",
+                bucket_name=resource_name,
                 removal_policy=RemovalPolicy.DESTROY,
                 block_public_access = s3.BlockPublicAccess.BLOCK_ALL
             )
@@ -42,7 +42,7 @@ class CDN(Construct):
             self.client_bucket = s3.Bucket(
                 self,
                 resource_name + 'Bucket',
-                bucket_name=f"{sub_domain}{BASE_DOMAIN}",
+                bucket_name=resource_name,
                 website_index_document='index.html',
                 website_error_document='index.html',
                 public_read_access=True,

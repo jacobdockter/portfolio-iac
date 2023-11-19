@@ -56,7 +56,8 @@ class PortfolioIacStack(Stack):
             "VoiceClient",
             dns.zone,
             dns.certificate,
-            "voice."
+            "voice.",
+            False
         )
 
         # create voice client pipeline
@@ -77,7 +78,8 @@ class PortfolioIacStack(Stack):
             "DevClient",
             dns.zone,
             dns.certificate,
-            "dev."
+            "dev.",
+            False
         )
 
         # create dev client pipeline
@@ -97,7 +99,8 @@ class PortfolioIacStack(Stack):
             "DirectoryClient",
             dns.zone,
             dns.certificate,
-            ""
+            "",
+            False
         )
 
         # create directory client pipeline
