@@ -26,23 +26,23 @@ class PortfolioIacStack(Stack):
         # create iac pipeline
         IacPipeline(
             self,
-            "IacPipeline",
-            "Portfolio",
+            "PortfolioIacPipeline",
+            "portfolio-iac-pipeline",
             "portfolio-iac"
         )
 
         # create dns construct
         dns = DNS(
             self,
-            "DNS",
+            "PortfolioDNS",
             "Portfolio"
         )
 
         # create cdn bucket
         CDN(
             self,
-            "CDN",
-            "CDN",
+            "PortfolioCDN",
+            "portfolio-cdn",
             dns.zone,
             dns.certificate,
             "cdn.",
@@ -53,7 +53,7 @@ class PortfolioIacStack(Stack):
         voice_client = CDN(
             self,
             "VoiceClient",
-            "VoiceClient",
+            "voice-client",
             dns.zone,
             dns.certificate,
             "voice.",
@@ -64,7 +64,7 @@ class PortfolioIacStack(Stack):
         ClientPipeline(
             self,
             "VoiceClientPipeline",
-            "Voice",
+            "voice-client-pipeline",
             voice_client.client_bucket,
             voice_client.distribution,
             "voice-portfolio-client"
@@ -75,7 +75,7 @@ class PortfolioIacStack(Stack):
         dev_client = CDN(
             self,
             "DevClient",
-            "DevClient",
+            "dev-client",
             dns.zone,
             dns.certificate,
             "dev.",
@@ -86,7 +86,7 @@ class PortfolioIacStack(Stack):
         ClientPipeline(
             self,
             "DevClientPipeline",
-            "Dev",
+            "dev-client-pipeline",
             dev_client.client_bucket,
             dev_client.distribution,
             "dev-portfolio-client"
@@ -96,7 +96,7 @@ class PortfolioIacStack(Stack):
         directory_client = CDN(
             self,
             "DirectoryClient",
-            "DirectoryClient",
+            "directory-client",
             dns.zone,
             dns.certificate,
             "",
@@ -107,7 +107,7 @@ class PortfolioIacStack(Stack):
         ClientPipeline(
             self,
             "DirectoryClientPipeline",
-            "Directory",
+            "directory-client-pipeline",
             directory_client.client_bucket,
             directory_client.distribution,
             "directory-portfolio-client"
