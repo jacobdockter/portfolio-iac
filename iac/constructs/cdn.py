@@ -43,7 +43,7 @@ class CDN(Construct):
             self.client_bucket = s3.Bucket(
                 self,
                 resource_name + 'Bucket',
-                bucket_name=f"{prefix}.{BASE_DOMAIN}",
+                bucket_name=f"{prefix}{BASE_DOMAIN}",
                 website_index_document='index.html',
                 website_error_document='index.html',
                 public_read_access=True,
@@ -63,6 +63,7 @@ class CDN(Construct):
             )
 
         # create cloudfront distribution for delivery
+
         self.distribution = cloudfront.Distribution(
             self,
             resource_name + 'Distribution',
@@ -70,7 +71,7 @@ class CDN(Construct):
                 origin=origins.S3Origin(self.client_bucket),
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
             ),
-            domain_names=[f"{sub_domain}{BASE_DOMAIN}"],
+            domain_names=[f"{prefix}{BASE_DOMAIN}"],
             certificate=certificate,
         )
 
