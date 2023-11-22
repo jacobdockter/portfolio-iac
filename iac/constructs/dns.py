@@ -33,8 +33,8 @@ class DNS(Construct):
         self.certificate = acm.Certificate(
             self,
             project_name + "Certificate",
-            certificate_name=f"{BASE_DOMAIN}",
-            domain_name=f"*.{BASE_DOMAIN}",
-            subject_alternative_names=[BASE_DOMAIN],
+            certificate_name=BASE_DOMAIN,
+            domain_name=BASE_DOMAIN,
+            subject_alternative_names=[f"*.{BASE_DOMAIN}"],
             validation=acm.CertificateValidation.from_dns(self.zone)
         )
