@@ -39,10 +39,11 @@ class CDN(Construct):
                 block_public_access = s3.BlockPublicAccess.BLOCK_ALL
             )
         else:
+            prefix = '' if sub_domain == '' else sub_domain + '.'
             self.client_bucket = s3.Bucket(
                 self,
                 resource_name + 'Bucket',
-                bucket_name=resource_name,
+                bucket_name=f"{prefix}.{BASE_DOMAIN}",
                 website_index_document='index.html',
                 website_error_document='index.html',
                 public_read_access=True,
