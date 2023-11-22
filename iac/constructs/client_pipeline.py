@@ -3,8 +3,10 @@ Client Pipeline Construct Class
 """
 import os
 from aws_cdk import (
+    RemovalPolicy,
     Duration,
     aws_iam as iam,
+    aws_s3 as s3,
     aws_codebuild as codebuild,
     aws_codepipeline as codepipeline,
     aws_codepipeline_actions as codepipeline_actions
@@ -105,11 +107,20 @@ class ClientPipeline(Construct):
             ]
         ))
 
+        artifact_bucket = s3.Bucket(
+            self,
+            resource_name + 'ArtifactsBucket',
+            bucket_name=f"{resource_name}-artifacts",
+            removal_policy=RemovalPolicy.DESTROY,
+            block_public_access = s3.BlockPublicAccess.BLOCK_ALL
+        )
+
         # client pipeline
         codepipeline.Pipeline(
             self,
             f"{resource_name}ClientGitHubPipeline",
             pipeline_name=f"{resource_name}ClientGitHubPipeline",
+            artifact_bucket=artifact_bucket,
             stages=[
                 codepipeline.StageProps(
                     stage_name="Source",

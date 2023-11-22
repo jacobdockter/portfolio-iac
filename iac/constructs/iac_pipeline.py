@@ -2,6 +2,8 @@
 Client Pipeline Construct Class
 """
 from aws_cdk import (
+    RemovalPolicy,
+    aws_s3 as s3,
     pipelines
 )
 from constructs import Construct
@@ -21,8 +23,17 @@ class IacPipeline(Construct):
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        artifact_bucket = s3.Bucket(
+            self,
+            resource_name + 'ArtifactsBucket',
+            bucket_name=f"{resource_name}-artifacts",
+            removal_policy=RemovalPolicy.DESTROY,
+            block_public_access = s3.BlockPublicAccess.BLOCK_ALL
+        )
+
         pipelines.CodePipeline(self, f"{resource_name}CdkPipeline",
             pipeline_name=f"{resource_name}CdkPipeline",
+            artifact_bucket=artifact_bucket,
             synth=pipelines.ShellStep(
                 "Synth",
                 input=pipelines.CodePipelineSource.connection(
