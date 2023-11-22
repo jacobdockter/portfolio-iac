@@ -76,12 +76,12 @@ class CDN(Construct):
         )
 
         # route cloudfront traffic to custom client domain
-        name = BASE_DOMAIN if sub_domain == '' else sub_domain.replace('.', '')
+        alias_record_name = BASE_DOMAIN if sub_domain == '' else sub_domain.replace('.', '')
         route53.ARecord(
             self,
             resource_name + 'Domain',
             zone=zone,
-            record_name=name,
+            record_name=alias_record_name,
             target=route53.RecordTarget.from_alias(
                 route53_targets.CloudFrontTarget(self.distribution)
             )
