@@ -45,7 +45,7 @@ class PortfolioIacStack(Stack):
             "dockter-portfolio-cdn",
             dns.zone,
             dns.certificate,
-            "cdn.",
+            "cdn",
             True
         )
 
@@ -56,7 +56,7 @@ class PortfolioIacStack(Stack):
             "dockter-voice-client",
             dns.zone,
             dns.certificate,
-            "voice.",
+            "voice",
             False
         )
 
@@ -78,7 +78,7 @@ class PortfolioIacStack(Stack):
             "dockter-dev-client",
             dns.zone,
             dns.certificate,
-            "dev.",
+            "dev",
             False
         )
 

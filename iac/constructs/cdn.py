@@ -29,6 +29,9 @@ class CDN(Construct):
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        prefix = '' if sub_domain == '' else sub_domain + '.'
+        alias_record_name = BASE_DOMAIN if sub_domain == '' else sub_domain
+
         # client bucket to hold application
         if storage:
             self.client_bucket = s3.Bucket(
@@ -39,7 +42,6 @@ class CDN(Construct):
                 block_public_access = s3.BlockPublicAccess.BLOCK_ALL
             )
         else:
-            prefix = '' if sub_domain == '' else sub_domain + '.'
             self.client_bucket = s3.Bucket(
                 self,
                 resource_name + 'Bucket',
@@ -76,7 +78,6 @@ class CDN(Construct):
         )
 
         # route cloudfront traffic to custom client domain
-        alias_record_name = BASE_DOMAIN if sub_domain == '' else sub_domain.replace('.', '')
         route53.ARecord(
             self,
             resource_name + 'Domain',
