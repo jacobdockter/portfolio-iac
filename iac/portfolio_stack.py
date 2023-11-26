@@ -5,7 +5,6 @@ from aws_cdk import (
     Stack,
 )
 from constructs import Construct
-from iac.constructs.dns import DNS
 from iac.constructs.cdn import CDN
 from iac.constructs.client_pipeline import ClientPipeline
 from iac.constructs.iac_pipeline import IacPipeline
@@ -19,6 +18,7 @@ class PortfolioIacStack(Stack):
         self,
         scope: Construct,
         construct_id: str,
+        certificate_stack,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -31,20 +31,13 @@ class PortfolioIacStack(Stack):
             "portfolio-iac"
         )
 
-        # create dns construct
-        dns = DNS(
-            self,
-            "PortfolioDNS",
-            "Portfolio"
-        )
-
         # create cdn bucket
         CDN(
             self,
             "PortfolioCDN",
             "dockter-portfolio-cdn",
-            dns.zone,
-            dns.certificate,
+            certificate_stack.zone,
+            certificate_stack.certificate,
             "cdn",
             True
         )
@@ -54,8 +47,8 @@ class PortfolioIacStack(Stack):
             self,
             "VoiceClient",
             "dockter-voice-client",
-            dns.zone,
-            dns.certificate,
+            certificate_stack.zone,
+            certificate_stack.certificate,
             "voice",
             False
         )
@@ -76,8 +69,8 @@ class PortfolioIacStack(Stack):
             self,
             "DevClient",
             "dockter-dev-client",
-            dns.zone,
-            dns.certificate,
+            certificate_stack.zone,
+            certificate_stack.certificate,
             "dev",
             False
         )
@@ -97,8 +90,8 @@ class PortfolioIacStack(Stack):
             self,
             "DirectoryClient",
             "dockter-directory-client",
-            dns.zone,
-            dns.certificate,
+            certificate_stack.zone,
+            certificate_stack.certificate,
             "",
             False
         )

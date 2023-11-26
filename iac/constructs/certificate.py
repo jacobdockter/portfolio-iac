@@ -1,5 +1,5 @@
-"""dns.py
-DNS Construct Class
+"""certificate.py
+Certificate Construct Class
 """
 from aws_cdk import (
     aws_certificatemanager as acm,
@@ -8,9 +8,9 @@ from aws_cdk import (
 from constructs import Construct
 from iac.constants import DOMAIN_ZONE_ID, BASE_DOMAIN
 
-class DNS(Construct):
+class Certificate(Construct):
     """
-    Defines that resources that make up a DNS
+    Defines that resources that make up a Certificate
     """
     def __init__(
         self,
@@ -36,5 +36,5 @@ class DNS(Construct):
             certificate_name=BASE_DOMAIN,
             domain_name=BASE_DOMAIN,
             subject_alternative_names=[f"*.{BASE_DOMAIN}"],
-            validation=acm.CertificateValidation.from_dns(self.zone)
+            validation=acm.CertificateValidation.from_dns(self.zone),
         )
