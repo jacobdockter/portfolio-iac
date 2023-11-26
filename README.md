@@ -56,3 +56,8 @@ command.
  * `cdk docs`        open CDK documentation
 
 Enjoy!
+
+## Special notes
+
+- when moving a domain, ensure hosted zone in old account is deleted
+- update domain in new account with name servers of the new hosted zone
