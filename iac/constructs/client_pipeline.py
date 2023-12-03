@@ -107,6 +107,23 @@ class ClientPipeline(Construct):
             ]
         ))
 
+        # TODO: use lambda to invalidate cache instead of codebuild
+        # invalidate action for pipeline - invalidates cloudfront cache
+        # invalidate_action = codepipeline_actions.LambdaInvokeAction(
+        #     action_name="InvalidateCache",
+        #     lambda_=invalidation_lambda,
+        #     user_parameters=distribution.distribution_id,
+        #     run_order=2
+        # )
+
+        # # add Lambda invoke permissions to invalidate action
+        # invalidate_action.action_properties.role.add_to_policy(
+        #     iam.PolicyStatement(
+        #         actions=["lambda:InvokeFunction", "lambda:ListFunctions"],
+        #         resources=[invalidation_lambda.function_arn]
+        #     )
+        # )
+
         artifact_bucket = s3.Bucket(
             self,
             resource_name + 'ArtifactsBucket',
