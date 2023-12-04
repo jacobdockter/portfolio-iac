@@ -18,13 +18,14 @@ class Lambda(Construct):
     """
     Defines the resources that make up a lambda
     """
+
     def __init__(
         self,
         scope: Construct,
         construct_id: str,
         resource_name: str,
         description: str,
-        **kwargs
+        **kwargs,
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
@@ -34,11 +35,11 @@ class Lambda(Construct):
             f"{resource_name}LambdaFunction",
             runtime=_lambda.Runtime.DOTNET_CORE_3_1,
             code=_lambda.Code.from_asset(path.join(__dirname, "templates/lambda.zip")),
-            handler='lambda::lambda.Function::FunctionHandlerAsync',
+            handler="lambda::lambda.Function::FunctionHandlerAsync",
             timeout=Duration.seconds(30),
             memory_size=256,
-            description=f'{description}. Managed by CDK.',
-            function_name=f'{resource_name}LambdaFunction'
+            description=f"{description}. Managed by CDK.",
+            function_name=f"{resource_name}LambdaFunction",
         )
 
         # cloudwatch log group
@@ -46,16 +47,16 @@ class Lambda(Construct):
             self,
             f"{resource_name}LogGroup",
             log_group_name=f"/aws/lambda/{resource_name}LambdaFunction",
-            removal_policy=RemovalPolicy.DESTROY
+            removal_policy=RemovalPolicy.DESTROY,
         )
 
         # lambda iam role
         self.iam_role = iam.Role(
             self,
             f"{resource_name}LambdaRole",
-            assumed_by=iam.ServicePrincipal('lambda.amazonaws.com'),
-            description=f'{description} lambda role. Managed by CDK.',
-            role_name=f'{resource_name}LambdaRole'
+            assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
+            description=f"{description} lambda role. Managed by CDK.",
+            role_name=f"{resource_name}LambdaRole",
         )
 
         # lambda iam policy
@@ -65,15 +66,15 @@ class Lambda(Construct):
             statements=[
                 iam.PolicyStatement(
                     actions=[
-                        'logs:CreateLogGroup',
-                        'logs:CreateLogStream',
-                        'logs:PutLogEvents',
+                        "logs:CreateLogGroup",
+                        "logs:CreateLogStream",
+                        "logs:PutLogEvents",
                     ],
                     resources=[
                         self.log_group.log_group_arn,
-                        f'{self.log_group.log_group_arn}:*'
-                    ]
+                        f"{self.log_group.log_group_arn}:*",
+                    ],
                 )
             ],
-            roles=[self.iam_role]
+            roles=[self.iam_role],
         )
