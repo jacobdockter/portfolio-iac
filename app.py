@@ -9,21 +9,17 @@ app = cdk.App()
 certificate_stack = CertificateStack(
     app,
     "CertificateStack",
-    env=cdk.Environment(
-        account=os.getenv('CDK_DEFAULT_ACCOUNT'),
-        region='us-east-1'
-    )
+    env=cdk.Environment(account=os.getenv("CDK_DEFAULT_ACCOUNT"), region="us-east-1"),
 )
 
 PortfolioIacStack(
     app,
     "PortfolioStack",
-    certificate_stack = certificate_stack,
+    certificate_stack=certificate_stack,
     env=cdk.Environment(
-        account=os.getenv('CDK_DEFAULT_ACCOUNT'),
-        region=os.getenv('CDK_DEFAULT_REGION')
+        account=os.getenv("CDK_DEFAULT_ACCOUNT"), region=os.getenv("CDK_DEFAULT_REGION")
     ),
-    cross_region_references=True
+    cross_region_references=True,
 )
 
 app.synth()

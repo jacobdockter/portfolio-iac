@@ -1,23 +1,18 @@
 """certificate.py
 Certificate Construct Class
 """
-from aws_cdk import (
-    aws_certificatemanager as acm,
-    aws_route53 as route53
-)
+from aws_cdk import aws_certificatemanager as acm, aws_route53 as route53
 from constructs import Construct
 from iac.constants import DOMAIN_ZONE_ID, BASE_DOMAIN
+
 
 class Certificate(Construct):
     """
     Defines that resources that make up a Certificate
     """
+
     def __init__(
-        self,
-        scope: Construct,
-        construct_id: str,
-        project_name: str,
-        **kwargs
+        self, scope: Construct, construct_id: str, project_name: str, **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
@@ -26,7 +21,7 @@ class Certificate(Construct):
             self,
             project_name + "DomainZone",
             hosted_zone_id=DOMAIN_ZONE_ID,
-            zone_name=BASE_DOMAIN
+            zone_name=BASE_DOMAIN,
         )
 
         # create certificate validated by zone
