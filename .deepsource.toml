@@ -9,7 +9,7 @@ enabled = true
 dependency_file_paths = ["requirements.txt"]
 
     [analyzers.meta]
-    runtime_version = "3.11.x"
+    runtime_version = "3.x.x"
     max_line_length = 104
     skip_doc_coverage = ["module", "init"]
 
