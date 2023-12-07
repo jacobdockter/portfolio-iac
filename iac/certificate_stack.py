@@ -16,6 +16,7 @@ class CertificateStack(Stack):
         self,
         scope: Construct,
         construct_id: str,
+        secret_stack,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)

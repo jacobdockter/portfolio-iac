@@ -19,6 +19,7 @@ class PortfolioIacStack(Stack):
         scope: Construct,
         construct_id: str,
         certificate_stack,
+        secret_stack,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
