@@ -25,7 +25,9 @@ class CertificateStack(Stack):
         certificate = Certificate(
             self,
             "PortfolioCertificate",
-            "Portfolio"
+            "Portfolio",
+            secret_stack.domain_zone_id,
+            secret_stack.domain_name
         )
 
         # output certificate and zone

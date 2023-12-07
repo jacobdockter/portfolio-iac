@@ -29,7 +29,9 @@ class PortfolioIacStack(Stack):
             self,
             "PortfolioIacPipeline",
             "portfolio-iac-pipeline",
-            "portfolio-iac"
+            "portfolio-iac",
+            secret_stack.github_account,
+            secret_stack.codestar_arn
         )
 
         # create cdn bucket
@@ -40,6 +42,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.zone,
             certificate_stack.certificate,
             "cdn",
+            secret_stack.base_domain,
             True
         )
 
@@ -51,6 +54,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.zone,
             certificate_stack.certificate,
             "voice",
+            secret_stack.base_domain,
             False
         )
 
@@ -61,7 +65,9 @@ class PortfolioIacStack(Stack):
             "dockter-voice-client-pipeline",
             voice_client.client_bucket,
             voice_client.distribution,
-            "voice-portfolio-client"
+            "voice-portfolio-client",
+            secret_stack.github_account,
+            secret_stack.codestar_arn
         )
 
 
@@ -73,6 +79,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.zone,
             certificate_stack.certificate,
             "dev",
+            secret_stack.base_domain,
             False
         )
 
@@ -83,7 +90,9 @@ class PortfolioIacStack(Stack):
             "dockter-dev-client-pipeline",
             dev_client.client_bucket,
             dev_client.distribution,
-            "dev-portfolio-client"
+            "dev-portfolio-client",
+            secret_stack.github_account,
+            secret_stack.codestar_arn
         )
 
         # create directory client bucket
@@ -94,6 +103,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.zone,
             certificate_stack.certificate,
             "",
+            secret_stack.base_domain,
             False
         )
 
@@ -104,5 +114,7 @@ class PortfolioIacStack(Stack):
             "dockter-directory-client-pipeline",
             directory_client.client_bucket,
             directory_client.distribution,
-            "directory-portfolio-client"
+            "directory-portfolio-client",
+            secret_stack.github_account,
+            secret_stack.codestar_arn
         )

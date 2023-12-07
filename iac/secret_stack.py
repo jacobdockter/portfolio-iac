@@ -23,8 +23,8 @@ class SecretStack(Stack):
 
         github_secret = Secret(
             self,
-            "PortfolioCodeStarArnSecert",
-            "CodeStarArn",
+            "PortfolioGitHubInformationSecret",
+            "GitHubInformation",
             body={
                 "CODESTAR_ARN": SecretValue.unsafe_plain_text(""),
                 "GITHUB_ACCOUNT": SecretValue.unsafe_plain_text("")

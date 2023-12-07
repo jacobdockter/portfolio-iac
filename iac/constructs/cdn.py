@@ -10,7 +10,6 @@ from aws_cdk import (
     aws_cloudfront_origins as origins
 )
 from constructs import Construct
-from iac.constants import BASE_DOMAIN
 
 class CDN(Construct):
     """
@@ -24,13 +23,14 @@ class CDN(Construct):
         zone,
         certificate,
         sub_domain: str,
+        base_domain: str,
         storage: bool = False,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         prefix = '' if sub_domain == '' else sub_domain + '.'
-        alias_record_name = BASE_DOMAIN if sub_domain == '' else sub_domain
+        alias_record_name = base_domain if sub_domain == '' else sub_domain
 
         # client bucket to hold application
         if storage:
@@ -45,7 +45,7 @@ class CDN(Construct):
             self.client_bucket = s3.Bucket(
                 self,
                 resource_name + 'Bucket',
-                bucket_name=f"{prefix}{BASE_DOMAIN}",
+                bucket_name=f"{prefix}{base_domain}",
                 website_index_document='index.html',
                 website_error_document='index.html',
                 public_read_access=True,
@@ -73,7 +73,7 @@ class CDN(Construct):
                 origin=origins.S3Origin(self.client_bucket),
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
             ),
-            domain_names=[f"{prefix}{BASE_DOMAIN}"],
+            domain_names=[f"{prefix}{base_domain}"],
             certificate=certificate,
         )
 

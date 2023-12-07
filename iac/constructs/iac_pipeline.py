@@ -7,7 +7,6 @@ from aws_cdk import (
     pipelines
 )
 from constructs import Construct
-from iac.constants import GITHUB_ACCOUNT, CODESTAR_ARN
 
 class IacPipeline(Construct):
     """
@@ -19,6 +18,8 @@ class IacPipeline(Construct):
         construct_id: str,
         resource_name: str,
         repository,
+        github_account: str,
+        codestar_arn: str,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -37,9 +38,9 @@ class IacPipeline(Construct):
             synth=pipelines.ShellStep(
                 "Synth",
                 input=pipelines.CodePipelineSource.connection(
-                    f"{GITHUB_ACCOUNT}/{repository}",
+                    f"{github_account}/{repository}",
                     "main",
-                    connection_arn=CODESTAR_ARN
+                    connection_arn=codestar_arn
                 ),
                 commands=[
                     "npm install -g aws-cdk",

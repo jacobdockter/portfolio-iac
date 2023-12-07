@@ -6,7 +6,6 @@ from aws_cdk import (
     aws_route53 as route53
 )
 from constructs import Construct
-from iac.constants import DOMAIN_ZONE_ID, BASE_DOMAIN
 
 class Certificate(Construct):
     """
@@ -17,6 +16,8 @@ class Certificate(Construct):
         scope: Construct,
         construct_id: str,
         project_name: str,
+        domain_zone_id: str,
+        base_domain: str,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -25,16 +26,16 @@ class Certificate(Construct):
         self.zone = route53.HostedZone.from_hosted_zone_attributes(
             self,
             project_name + "DomainZone",
-            hosted_zone_id=DOMAIN_ZONE_ID,
-            zone_name=BASE_DOMAIN
+            hosted_zone_id=domain_zone_id,
+            zone_name=base_domain
         )
 
         # create certificate validated by zone
         self.certificate = acm.Certificate(
             self,
             project_name + "Certificate",
-            certificate_name=BASE_DOMAIN,
-            domain_name=BASE_DOMAIN,
-            subject_alternative_names=[f"*.{BASE_DOMAIN}"],
+            certificate_name=base_domain,
+            domain_name=base_domain,
+            subject_alternative_names=[f"*.{base_domain}"],
             validation=acm.CertificateValidation.from_dns(self.zone),
         )

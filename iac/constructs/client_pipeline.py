@@ -12,7 +12,6 @@ from aws_cdk import (
     aws_codepipeline_actions as codepipeline_actions
 )
 from constructs import Construct
-from iac.constants import GITHUB_ACCOUNT, CODESTAR_ARN
 
 class ClientPipeline(Construct):
     """
@@ -26,6 +25,8 @@ class ClientPipeline(Construct):
         client_bucket,
         distribution,
         repository,
+        github_account: str,
+        codestar_arn: str,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -34,10 +35,10 @@ class ClientPipeline(Construct):
         source_output = codepipeline.Artifact()
         source_action = codepipeline_actions.CodeStarConnectionsSourceAction(
             action_name=f"{resource_name}CodeStarSource",
-            owner=GITHUB_ACCOUNT,
+            owner=github_account,
             repo=repository,
             output=source_output,
-            connection_arn=CODESTAR_ARN
+            connection_arn=codestar_arn
         )
 
         # build output/action for pipeline - builds client

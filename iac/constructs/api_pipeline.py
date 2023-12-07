@@ -11,7 +11,6 @@ from aws_cdk import (
     aws_codepipeline_actions as codepipeline_actions
 )
 from constructs import Construct
-from iac.constants import GITHUB_ACCOUNT, CODESTAR_ARN
 
 class ApiPipeline(Construct):
     """
