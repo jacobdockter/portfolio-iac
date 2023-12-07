@@ -9,11 +9,13 @@ from iac.constructs.cdn import CDN
 from iac.constructs.client_pipeline import ClientPipeline
 from iac.constructs.iac_pipeline import IacPipeline
 
+
 class PortfolioIacStack(Stack):
     """
     PortfolioIacStack
     Defines resources for the portfolio suite of applications
     """
+
     def __init__(
         self,
         scope: Construct,
@@ -26,10 +28,7 @@ class PortfolioIacStack(Stack):
 
         # create iac pipeline
         IacPipeline(
-            self,
-            "PortfolioIacPipeline",
-            "portfolio-iac-pipeline",
-            "portfolio-iac"
+            self, "PortfolioIacPipeline", "portfolio-iac-pipeline", "portfolio-iac"
         )
 
         # create cdn bucket
@@ -40,7 +39,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.zone,
             certificate_stack.certificate,
             "cdn",
-            True
+            True,
         )
 
         # create voice client bucket
@@ -51,7 +50,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.zone,
             certificate_stack.certificate,
             "voice",
-            False
+            False,
         )
 
         # create voice client pipeline
@@ -61,9 +60,8 @@ class PortfolioIacStack(Stack):
             "dockter-voice-client-pipeline",
             voice_client.client_bucket,
             voice_client.distribution,
-            "voice-portfolio-client"
+            "voice-portfolio-client",
         )
-
 
         # create dev client bucket
         dev_client = CDN(
@@ -73,7 +71,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.zone,
             certificate_stack.certificate,
             "dev",
-            False
+            False,
         )
 
         # create dev client pipeline
@@ -83,7 +81,7 @@ class PortfolioIacStack(Stack):
             "dockter-dev-client-pipeline",
             dev_client.client_bucket,
             dev_client.distribution,
-            "dev-portfolio-client"
+            "dev-portfolio-client",
         )
 
         # create directory client bucket
@@ -94,7 +92,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.zone,
             certificate_stack.certificate,
             "",
-            False
+            False,
         )
 
         # create directory client pipeline
@@ -104,5 +102,5 @@ class PortfolioIacStack(Stack):
             "dockter-directory-client-pipeline",
             directory_client.client_bucket,
             directory_client.distribution,
-            "directory-portfolio-client"
+            "directory-portfolio-client",
         )
