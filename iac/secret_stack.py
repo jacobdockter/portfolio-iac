@@ -3,6 +3,7 @@ Defines the SecretStack class
 """
 from aws_cdk import (
     Stack,
+    SecretValue
 )
 from constructs import Construct
 from iac.constructs.secret import Secret
@@ -25,8 +26,8 @@ class SecretStack(Stack):
             "PortfolioCodeStarArnSecert",
             "CodeStarArn",
             body={
-                'CODESTAR_ARN': '',
-                'GITHUB_ACCOUNT': ''
+                "CODESTAR_ARN": SecretValue.unsafe_plain_text(""),
+                "GITHUB_ACCOUNT": SecretValue.unsafe_plain_text("")
             }
         )
 
@@ -35,8 +36,8 @@ class SecretStack(Stack):
             "PortfolioDomainInformationSecret",
             "DomainInformation",
             body={
-                'DOMAIN_NAME': '',
-                'DOMAIN_ZONE_ID': ''
+                "DOMAIN_NAME": SecretValue.unsafe_plain_text(""),
+                "DOMAIN_ZONE_ID": SecretValue.unsafe_plain_text("")
             }
         )
 
