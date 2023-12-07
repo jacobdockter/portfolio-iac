@@ -8,14 +8,16 @@ from aws_cdk import (
     aws_iam as iam,
     aws_codebuild as codebuild,
     aws_codepipeline as codepipeline,
-    aws_codepipeline_actions as codepipeline_actions
+    aws_codepipeline_actions as codepipeline_actions,
 )
 from constructs import Construct
+
 
 class ApiPipeline(Construct):
     """
     Defines the resources that make up a api pipeline
     """
+
     def __init__(
         self,
         scope: Construct,
