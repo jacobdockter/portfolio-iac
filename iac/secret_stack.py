@@ -41,7 +41,15 @@ class SecretStack(Stack):
             }
         )
 
-        self.codestar_arn = github_secret.secret.secret_value_from_json('CODESTAR_ARN')
-        self.github_account = github_secret.secret.secret_value_from_json('GITHUB_ACCOUNT')
-        self.domain_name = domain_information_secret.secret.secret_value_from_json('DOMAIN_NAME')
-        self.domain_zone_id = domain_information_secret.secret.secret_value_from_json('DOMAIN_ZONE_ID')
+        self.codestar_arn = github_secret.secret.secret_value_from_json(
+            'CODESTAR_ARN'
+        ).to_string()
+        self.github_account = github_secret.secret.secret_value_from_json(
+            'GITHUB_ACCOUNT'
+        ).to_string()
+        self.domain_name = domain_information_secret.secret.secret_value_from_json(
+            'DOMAIN_NAME'
+        ).to_string()
+        self.domain_zone_id = domain_information_secret.secret.secret_value_from_json(
+            'DOMAIN_ZONE_ID'
+        ).to_string()
