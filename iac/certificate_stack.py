@@ -6,6 +6,7 @@ from aws_cdk import (
 )
 from constructs import Construct
 from iac.constructs.certificate import Certificate
+from iac.constants import BASE_DOMAIN_NAME
 
 class CertificateStack(Stack):
     """
@@ -27,7 +28,7 @@ class CertificateStack(Stack):
             "PortfolioCertificate",
             "Portfolio",
             secret_stack.domain_zone_id,
-            secret_stack.domain_name
+            BASE_DOMAIN_NAME
         )
 
         # output certificate and zone
