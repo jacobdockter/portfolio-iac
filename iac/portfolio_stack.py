@@ -8,6 +8,13 @@ from constructs import Construct
 from iac.constructs.cdn import CDN
 from iac.constructs.client_pipeline import ClientPipeline
 from iac.constructs.iac_pipeline import IacPipeline
+from iac.constants import (
+    DEV_CLIENT_REPOSITORY,
+    DIRECTORY_CLIENT_REPOSITORY,
+    VOICE_CLIENT_REPOSITORY,
+    GITHUB_ACCOUNT,
+    RESOURCE_NAME
+)
 
 class PortfolioIacStack(Stack):
     """
@@ -30,7 +37,7 @@ class PortfolioIacStack(Stack):
             "PortfolioIacPipeline",
             "portfolio-iac-pipeline",
             "portfolio-iac",
-            secret_stack.github_account,
+            GITHUB_ACCOUNT,
             secret_stack.codestar_arn
         )
 
@@ -38,7 +45,7 @@ class PortfolioIacStack(Stack):
         CDN(
             self,
             "PortfolioCDN",
-            "dockter-portfolio-cdn",
+            f"{RESOURCE_NAME}-portfolio-cdn",
             certificate_stack.zone,
             certificate_stack.certificate,
             "cdn",
@@ -50,7 +57,7 @@ class PortfolioIacStack(Stack):
         voice_client = CDN(
             self,
             "VoiceClient",
-            "dockter-voice-client",
+            f"{RESOURCE_NAME}-voice-client",
             certificate_stack.zone,
             certificate_stack.certificate,
             "voice",
@@ -62,11 +69,11 @@ class PortfolioIacStack(Stack):
         ClientPipeline(
             self,
             "VoiceClientPipeline",
-            "dockter-voice-client-pipeline",
+            f"{RESOURCE_NAME}-voice-client-pipeline",
             voice_client.client_bucket,
             voice_client.distribution,
-            "voice-portfolio-client",
-            secret_stack.github_account,
+            VOICE_CLIENT_REPOSITORY,
+            GITHUB_ACCOUNT,
             secret_stack.codestar_arn
         )
 
@@ -75,7 +82,7 @@ class PortfolioIacStack(Stack):
         dev_client = CDN(
             self,
             "DevClient",
-            "dockter-dev-client",
+            f"{RESOURCE_NAME}-dev-client",
             certificate_stack.zone,
             certificate_stack.certificate,
             "dev",
@@ -87,11 +94,11 @@ class PortfolioIacStack(Stack):
         ClientPipeline(
             self,
             "DevClientPipeline",
-            "dockter-dev-client-pipeline",
+            f"{RESOURCE_NAME}-dev-client-pipeline",
             dev_client.client_bucket,
             dev_client.distribution,
-            "dev-portfolio-client",
-            secret_stack.github_account,
+            DEV_CLIENT_REPOSITORY,
+            GITHUB_ACCOUNT,
             secret_stack.codestar_arn
         )
 
@@ -99,7 +106,7 @@ class PortfolioIacStack(Stack):
         directory_client = CDN(
             self,
             "DirectoryClient",
-            "dockter-directory-client",
+            f"{RESOURCE_NAME}-directory-client",
             certificate_stack.zone,
             certificate_stack.certificate,
             "",
@@ -111,10 +118,10 @@ class PortfolioIacStack(Stack):
         ClientPipeline(
             self,
             "DirectoryClientPipeline",
-            "dockter-directory-client-pipeline",
+            f"{RESOURCE_NAME}-directory-client-pipeline",
             directory_client.client_bucket,
             directory_client.distribution,
-            "directory-portfolio-client",
-            secret_stack.github_account,
+            DIRECTORY_CLIENT_REPOSITORY,
+            GITHUB_ACCOUNT,
             secret_stack.codestar_arn
         )
