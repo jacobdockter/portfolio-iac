@@ -16,8 +16,7 @@ certificate_stack = CertificateStack(
     env=cdk.Environment(
         account=AWS_ACCOUNT_ID,
         region='us-east-1'
-    ),
-    cross_region_references=True
+    )
 )
 
 PortfolioIacStack(
