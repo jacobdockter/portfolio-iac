@@ -1,0 +1,5 @@
+VOICE_CLIENT_REPOSITORY = "voice-portfolio-client"
+DEV_CLIENT_REPOSITORY = "dev-portfolio-client"
+DIRECTORY_CLIENT_REPOSITORY = "directory-portfolio-client"
+GITHUB_ACCOUNT = "jacobdockter"
+RESOURCE_NAME = "dockter"
