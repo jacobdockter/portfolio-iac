@@ -24,8 +24,7 @@ class SecretStack(Stack):
         domain_information_secret = Secret(
             self,
             "PortfolioDomainZoneSecret",
-            "DomainZoneID",
-            body=""
+            "DomainZoneID"
         )
 
         self.domain_zone_id = domain_information_secret.secret.secret_value.to_string()

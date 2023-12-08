@@ -21,11 +21,20 @@ class Secret(Construct):
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        self.secret = secretsmanager.Secret(
-            self,
-            f'{resource_name}Secret',
-            secret_name=f'{resource_name}Secret',
-            description=f'{resource_name} Secret. Managed by CDK.',
-            secret_object_value=body,
-            removal_policy=RemovalPolicy.DESTROY
-        )
+        if body is None:
+            self.secret = secretsmanager.Secret(
+                self,
+                f'{resource_name}Secret',
+                secret_name=f'{resource_name}Secret',
+                description=f'{resource_name} Secret. Managed by CDK.',
+                removal_policy=RemovalPolicy.DESTROY
+            )
+        else:
+            self.secret = secretsmanager.Secret(
+                self,
+                f'{resource_name}Secret',
+                secret_name=f'{resource_name}Secret',
+                description=f'{resource_name} Secret. Managed by CDK.',
+                secret_object_value=body,
+                removal_policy=RemovalPolicy.DESTROY
+            )
