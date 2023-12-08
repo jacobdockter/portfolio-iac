@@ -8,6 +8,7 @@ AWS_ACCOUNT_ID = os.getenv('CDK_DEFAULT_ACCOUNT', None)
 VOICE_CLIENT_REPOSITORY = "voice-portfolio-client"
 DEV_CLIENT_REPOSITORY = "dev-portfolio-client"
 DIRECTORY_CLIENT_REPOSITORY = "directory-portfolio-client"
+IAC_REPOSITORY = "portfolio-iac"
 GITHUB_ACCOUNT = "jacobdockter"
 RESOURCE_NAME = "dockter"
 CODESTAR_ARN = f"arn:aws:codestar-connections:{AWS_REGION}:{AWS_ACCOUNT_ID}:connection/eff81f9d-3087-4f5a-b273-89f91ca7be75"

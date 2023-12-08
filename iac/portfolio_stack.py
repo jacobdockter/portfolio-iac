@@ -12,6 +12,7 @@ from iac.constants import (
     DEV_CLIENT_REPOSITORY,
     DIRECTORY_CLIENT_REPOSITORY,
     VOICE_CLIENT_REPOSITORY,
+    IAC_REPOSITORY,
     GITHUB_ACCOUNT,
     CODESTAR_ARN,
     BASE_DOMAIN_NAME
@@ -37,7 +38,7 @@ class PortfolioIacStack(Stack):
             self,
             "PortfolioIacPipeline",
             "portfolio-iac-pipeline",
-            "portfolio-iac",
+            IAC_REPOSITORY,
             GITHUB_ACCOUNT,
             CODESTAR_ARN
         )
