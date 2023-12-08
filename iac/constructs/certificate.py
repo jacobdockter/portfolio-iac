@@ -16,18 +16,16 @@ class Certificate(Construct):
         scope: Construct,
         construct_id: str,
         project_name: str,
-        domain_zone_id: str,
         base_domain: str,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         # retrieve domain zone from route53
-        self.zone = route53.HostedZone.from_hosted_zone_attributes(
+        self.zone = route53.HostedZone.from_lookup(
             self,
             project_name + "DomainZone",
-            hosted_zone_id=domain_zone_id,
-            zone_name=base_domain
+            domain_name=base_domain
         )
 
         # create certificate validated by zone
