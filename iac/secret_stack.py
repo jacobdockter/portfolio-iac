@@ -23,12 +23,9 @@ class SecretStack(Stack):
 
         github_secret = Secret(
             self,
-            "PortfolioGitHubInformationSecret",
-            "GitHubInformation",
-            body={
-                "CODESTAR_ARN": SecretValue.unsafe_plain_text(""),
-                "GITHUB_ACCOUNT": SecretValue.unsafe_plain_text("")
-            }
+            "PortfolioCodestarArnSecret",
+            "CodestarArn",
+            body=""
         )
 
         domain_information_secret = Secret(
@@ -41,12 +38,7 @@ class SecretStack(Stack):
             }
         )
 
-        self.codestar_arn = github_secret.secret.secret_value_from_json(
-            'CODESTAR_ARN'
-        ).to_string()
-        self.github_account = github_secret.secret.secret_value_from_json(
-            'GITHUB_ACCOUNT'
-        ).to_string()
+        self.codestar_arn = github_secret.secret.secret_value.to_string()
         self.domain_name = domain_information_secret.secret.secret_value_from_json(
             'DOMAIN_NAME'
         ).to_string()
