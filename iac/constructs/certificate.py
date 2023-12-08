@@ -6,7 +6,6 @@ from aws_cdk import (
     aws_route53 as route53
 )
 from constructs import Construct
-from iac.constants import DOMAIN_ZONE_ID
 
 class Certificate(Construct):
     """
@@ -23,11 +22,10 @@ class Certificate(Construct):
         super().__init__(scope, construct_id, **kwargs)
 
         # retrieve domain zone from route53
-        self.zone = route53.HostedZone.from_hosted_zone_attributes(
+        self.zone = route53.HostedZone.from_lookup(
             self,
             project_name + "DomainZone",
-            hosted_zone_id=DOMAIN_ZONE_ID,
-            zone_name=base_domain
+            domain_name=base_domain
         )
 
         # create certificate validated by zone
