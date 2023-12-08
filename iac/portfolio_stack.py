@@ -14,21 +14,23 @@ from iac.constants import (
     VOICE_CLIENT_REPOSITORY,
     GITHUB_ACCOUNT,
     CODESTAR_ARN,
-    BASE_DOMAIN_NAME
+    BASE_DOMAIN_NAME,
 )
+
 
 class PortfolioIacStack(Stack):
     """
     PortfolioIacStack
     Defines resources for the portfolio suite of applications
     """
+
     def __init__(
         self,
         scope: Construct,
         construct_id: str,
         resource_name: str,
         certificate_stack,
-        **kwargs
+        **kwargs,
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
@@ -39,7 +41,7 @@ class PortfolioIacStack(Stack):
             "portfolio-iac-pipeline",
             "portfolio-iac",
             GITHUB_ACCOUNT,
-            CODESTAR_ARN
+            CODESTAR_ARN,
         )
 
         # create cdn bucket
@@ -51,7 +53,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.certificate,
             "cdn",
             BASE_DOMAIN_NAME,
-            True
+            True,
         )
 
         # create voice client bucket
@@ -63,7 +65,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.certificate,
             "voice",
             BASE_DOMAIN_NAME,
-            False
+            False,
         )
 
         # create voice client pipeline
@@ -75,9 +77,8 @@ class PortfolioIacStack(Stack):
             voice_client.distribution,
             VOICE_CLIENT_REPOSITORY,
             GITHUB_ACCOUNT,
-            CODESTAR_ARN
+            CODESTAR_ARN,
         )
-
 
         # create dev client bucket
         dev_client = CDN(
@@ -88,7 +89,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.certificate,
             "dev",
             BASE_DOMAIN_NAME,
-            False
+            False,
         )
 
         # create dev client pipeline
@@ -100,7 +101,7 @@ class PortfolioIacStack(Stack):
             dev_client.distribution,
             DEV_CLIENT_REPOSITORY,
             GITHUB_ACCOUNT,
-            CODESTAR_ARN
+            CODESTAR_ARN,
         )
 
         # create directory client bucket
@@ -112,7 +113,7 @@ class PortfolioIacStack(Stack):
             certificate_stack.certificate,
             "",
             BASE_DOMAIN_NAME,
-            False
+            False,
         )
 
         # create directory client pipeline
@@ -124,5 +125,5 @@ class PortfolioIacStack(Stack):
             directory_client.distribution,
             DIRECTORY_CLIENT_REPOSITORY,
             GITHUB_ACCOUNT,
-            CODESTAR_ARN
+            CODESTAR_ARN,
         )
